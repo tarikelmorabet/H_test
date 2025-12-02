@@ -1,0 +1,30 @@
+body {
+    background-color: #007bff; /* Une belle couleur bleue */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: sans-serif;
+}
+
+.container {
+    text-align: center;
+}
+
+button {
+    font-size: 24px;
+    padding: 20px 40px;
+    margin: 10px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    background-color: white;
+    color: #007bff;
+    font-weight: bold;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+button:hover {
+    background-color: #f0f0f0;
+}
