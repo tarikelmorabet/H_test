@@ -165,8 +165,11 @@ const logoutButton = document.getElementById('logout-button');
 const offerForm = document.getElementById('offer-form');
 const offerMessage = document.getElementById('offer-message');
 
-if (welcomeMessage && logoutButton && offerForm) {
-    
+// On vérifie si les éléments de base existent. Si non, on n'exécute pas le code.
+if (!welcomeMessage || !logoutButton || !offerForm) {
+    console.error("Erreur : Les éléments essentiels du tableau de bord sont manquants dans le HTML.");
+} else {
+
     const loggedInUserEmail = localStorage.getItem('loggedInUser');
     
     if (loggedInUserEmail) {
@@ -182,13 +185,25 @@ if (welcomeMessage && logoutButton && offerForm) {
         const citySelect = document.getElementById('offer-city');
         const districtSelect = document.getElementById('offer-district');
 
-        // --- ÉTAPE 1 : Charger les fonctions depuis data.json ---
-        fetch('data.json')
-            .then(response => response.json())
-            .then(data => {
-                const allOptions = data.options;
+        // --- FONCTION POUR CHARGER LES DONNÉES ET PEUPLER LES MENUS ---
+        const populateForm = async () => {
+            try {
+                console.log("Chargement de data.json...");
+                const functionsResponse = await fetch('data.json');
+                if (!functionsResponse.ok) throw new Error(`Erreur HTTP! statut: ${functionsResponse.status}`);
+                const functionsData = await functionsResponse.json();
+                console.log("data.json chargé avec succès.", functionsData);
 
-                // Remplir le menu des fonctions
+                console.log("Chargement de cities.json...");
+                const citiesResponse = await fetch('cities.json');
+                if (!citiesResponse.ok) throw new Error(`Erreur HTTP! statut: ${citiesResponse.status}`);
+                const citiesData = await citiesResponse.json();
+                console.log("cities.json chargé avec succès.", citiesData);
+
+                const allOptions = functionsData.options;
+                const allCities = citiesData.cities;
+
+                // Peupler le menu des fonctions
                 Object.keys(allOptions).forEach(func => {
                     const option = document.createElement('option');
                     option.value = func;
@@ -196,7 +211,15 @@ if (welcomeMessage && logoutButton && offerForm) {
                     functionSelect.appendChild(option);
                 });
 
-                // LOGIQUE DES MENUS LIÉS (Fonction -> Option)
+                // Peupler le menu des villes
+                Object.keys(allCities).forEach(city => {
+                    const option = document.createElement('option');
+                    option.value = city;
+                    option.textContent = city;
+                    citySelect.appendChild(option);
+                });
+                
+                // --- LOGIQUE DES MENUS LIÉS ---
                 functionSelect.addEventListener('change', () => {
                     const selectedFunction = functionSelect.value;
                     optionSelect.innerHTML = '<option value="">--Choisir une option--</option>';
@@ -212,25 +235,7 @@ if (welcomeMessage && logoutButton && offerForm) {
                         optionSelect.disabled = true;
                     }
                 });
-            })
-            .catch(error => console.error('Erreur de chargement de data.json:', error));
 
-
-        // --- ÉTAPE 2 : Charger les villes depuis cities.json ---
-        fetch('cities.json')
-            .then(response => response.json())
-            .then(data => {
-                const allCities = data.cities;
-
-                // Remplir le menu des villes
-                Object.keys(allCities).forEach(city => {
-                    const option = document.createElement('option');
-                    option.value = city;
-                    option.textContent = city;
-                    citySelect.appendChild(option);
-                });
-
-                // LOGIQUE DES MENUS LIÉS (Ville -> Quartier)
                 citySelect.addEventListener('change', () => {
                     const selectedCity = citySelect.value;
                     districtSelect.innerHTML = '<option value="">--Choisir un quartier--</option>';
@@ -246,32 +251,32 @@ if (welcomeMessage && logoutButton && offerForm) {
                         districtSelect.disabled = true;
                     }
                 });
-            })
-            .catch(error => console.error('Erreur de chargement de cities.json:', error));
 
+                // --- CHARGER LES DONNÉES SAUVEGARDÉES ---
+                const offerData = JSON.parse(localStorage.getItem(`offer_${loggedInUserEmail}`));
+                if (offerData) {
+                    functionSelect.value = offerData.function || '';
+                    functionSelect.dispatchEvent(new Event('change'));
+                    optionSelect.value = offerData.option || '';
+                    descriptionInput.value = offerData.description || '';
+                    scheduleSelect.value = offerData.schedule || '';
+                    priceInput.value = offerData.price || '';
+                    citySelect.value = offerData.city || '';
+                    citySelect.dispatchEvent(new Event('change'));
+                    districtSelect.value = offerData.district || '';
+                }
 
-        // --- ÉTAPE 3 : Charger les données sauvegardées de l'offre ---
-        const offerData = JSON.parse(localStorage.getItem(`offer_${loggedInUserEmail}`));
-        if (offerData) {
-            // On utilise setTimeout pour laisser le temps aux fetch de se terminer
-            setTimeout(() => {
-                functionSelect.value = offerData.function || '';
-                functionSelect.dispatchEvent(new Event('change')); // Déclencher pour remplir les options
-                
-                optionSelect.value = offerData.option || '';
-                descriptionInput.value = offerData.description || '';
-                scheduleSelect.value = offerData.schedule || '';
-                priceInput.value = offerData.price || '';
-                
-                citySelect.value = offerData.city || '';
-                citySelect.dispatchEvent(new Event('change')); // Déclencher pour remplir les quartiers
-                
-                districtSelect.value = offerData.district || '';
-            }, 500); // 500ms devraient être suffisants
-        }
+            } catch (error) {
+                console.error("Une erreur est survenue lors du chargement des données du formulaire:", error);
+                offerMessage.textContent = "Erreur de chargement des données. Veuillez réessayer plus tard.";
+                offerMessage.style.color = "red";
+            }
+        };
 
+        // Lancer la fonction
+        populateForm();
 
-        // --- ÉTAPE 4 : Gérer la soumission du formulaire ---
+        // --- SOUMISSION DU FORMULAIRE ---
         offerForm.addEventListener('submit', (e) => {
             e.preventDefault();
             
@@ -297,7 +302,7 @@ if (welcomeMessage && logoutButton && offerForm) {
         window.location.href = 'login.html';
     }
 
-    // Gérer le clic sur le bouton de déconnexion
+    // --- GESTION DE LA DÉCONNEXION ---
     logoutButton.addEventListener('click', () => {
         localStorage.removeItem('loggedInUser');
         window.location.href = 'index.html';
