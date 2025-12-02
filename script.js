@@ -8,27 +8,21 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-   // --- LOGIQUE POUR LA PAGE D'ACCUEIL (index.html) ---
-const btnHelpNeeded = document.getElementById('btn-help-needed');
-const btnCanHelp = document.getElementById('btn-can-help');
+    // --- LOGIQUE POUR LA PAGE D'ACCUEIL (index.html) ---
+    const btnHelpNeeded = document.getElementById('btn-help-needed');
+    const btnCanHelp = document.getElementById('btn-can-help');
+    if (btnHelpNeeded && btnCanHelp) {
+        btnHelpNeeded.addEventListener('click', (e) => {
+            e.preventDefault(); // Empêche le saut instantané
+            addClickEffect(btnHelpNeeded);
+            setTimeout(() => { window.location.href = 'need_help.html'; }, 150); // Laisse le temps à l'animation
+        });
 
-if (btnHelpNeeded && btnCanHelp) {
-    function addClickEffect(button) {
-        if (button) {
-            button.classList.add('button-clicked');
-            setTimeout(() => button.classList.remove('button-clicked'), 150);
-        }
-    }
-
-    // On ajoute l'effet de clic sur les nouveaux liens
-    btnHelpNeeded.addEventListener('click', (e) => {
-        addClickEffect(btnHelpNeeded);
-    });
-
-    btnCanHelp.addEventListener('click', (e) => {
-        addClickEffect(btnCanHelp);
-    });
-}
+        btnCanHelp.addEventListener('click', (e) => {
+            e.preventDefault();
+            addClickEffect(btnCanHelp);
+            setTimeout(() => { window.location.href = 'can_help.html'; }, 150);
+        });
     }
 
     // --- LOGIQUE POUR LES BOUTONS DE RETOUR ---
@@ -54,21 +48,25 @@ if (btnHelpNeeded && btnCanHelp) {
     const registerMessage = document.getElementById('register-message');
     if (registerForm) {
         registerForm.addEventListener('submit', (e) => {
-            e.preventDefault(); // Empêche le rechargement de la page
+            e.preventDefault();
+            const submitButton = registerForm.querySelector('button[type="submit"]');
             const username = document.getElementById('username').value;
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
 
-            // Vérifier si l'utilisateur existe déjà
+            submitButton.disabled = true;
+            submitButton.textContent = 'Création en cours...';
+
             if (localStorage.getItem(email)) {
                 registerMessage.textContent = "Cet email est déjà utilisé.";
                 registerMessage.style.color = "red";
+                submitButton.disabled = false;
+                submitButton.textContent = "S'inscrire";
             } else {
-                // Sauvegarder l'utilisateur
                 localStorage.setItem(email, JSON.stringify({ username, password }));
-                registerMessage.textContent = "Compte créé avec succès ! Vous pouvez maintenant vous connecter.";
+                registerMessage.textContent = "Compte créé avec succès ! Redirection vers la connexion...";
                 registerMessage.style.color = "green";
-                setTimeout(() => { window.location.href = 'login.html'; }, 2000);
+                setTimeout(() => { window.location.href = 'login.html'; }, 2500);
             }
         });
     }
@@ -79,55 +77,84 @@ if (btnHelpNeeded && btnCanHelp) {
     if (loginForm) {
         loginForm.addEventListener('submit', (e) => {
             e.preventDefault();
+            const submitButton = loginForm.querySelector('button[type="submit"]');
             const email = document.getElementById('login-email').value;
             const password = document.getElementById('login-password').value;
             const userData = JSON.parse(localStorage.getItem(email));
 
+            submitButton.disabled = true;
+            submitButton.textContent = 'Connexion...';
+
             if (userData && userData.password === password) {
-                // Connexion réussie
-                localStorage.setItem('loggedInUser', email); // Sauvegarde la session
-                loginMessage.textContent = "Connexion réussie ! Redirection...";
+                localStorage.setItem('loggedInUser', email);
+                loginMessage.textContent = "Connexion réussie ! Redirection vers votre tableau de bord...";
                 loginMessage.style.color = "green";
-                setTimeout(() => { window.location.href = 'dashboard.html'; }, 1500);
+                // Pour l'instant, on redirige vers l'accueil car dashboard.html n'existe pas encore
+                setTimeout(() => { window.location.href = 'index.html'; }, 2000); 
             } else {
                 loginMessage.textContent = "Email ou mot de passe incorrect.";
                 loginMessage.style.color = "red";
+                submitButton.disabled = false;
+                submitButton.textContent = "Se connecter";
             }
         });
     }
     
-    // --- LOGIQUE POUR LA PAGE "I need help" (inchangée) ---
+    // --- LOGIQUE POUR LA PAGE "I need help" (need_help.html) ---
     const functionSelect = document.getElementById('function-select');
     const optionSelect = document.getElementById('option-select');
     const selectionResult = document.getElementById('selection-result');
+
     if (functionSelect && optionSelect) {
-        fetch('data.json').then(response => response.json()).then(data => {
-            const allOptions = data.options;
-            functionSelect.addEventListener('change', () => {
-                const selectedFunction = functionSelect.value;
-                optionSelect.innerHTML = '<option value="">--Choose an option--</option>';
-                selectionResult.textContent = '';
-                if (selectedFunction && allOptions[selectedFunction]) {
-                    optionSelect.disabled = false;
-                    const options = allOptions[selectedFunction];
-                    options.forEach(optionText => {
-                        const option = document.createElement('option');
-                        option.value = optionText.toLowerCase().replace(/\s+/g, '-');
-                        option.textContent = optionText;
-                        optionSelect.appendChild(option);
-                    });
-                } else {
-                    optionSelect.disabled = true;
+        fetch('data.json')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error("Erreur lors du chargement du fichier data.json");
                 }
-            });
-            optionSelect.addEventListener('change', () => {
-                if (optionSelect.value) {
-                    const selectedOptionText = optionSelect.options[optionSelect.selectedIndex].text;
-                    selectionResult.textContent = `Vous avez choisi : ${selectedOptionText}`;
-                } else {
+                return response.json();
+            })
+            .then(data => {
+                const allOptions = data.options;
+
+                functionSelect.addEventListener('change', () => {
+                    const selectedFunction = functionSelect.value;
+                    
+                    // On vide le menu des options précédentes
+                    optionSelect.innerHTML = '<option value="">--Choose an option--</option>';
                     selectionResult.textContent = '';
-                }
+
+                    if (selectedFunction && allOptions[selectedFunction]) {
+                        optionSelect.disabled = false; // On active le deuxième menu
+                        
+                        const options = allOptions[selectedFunction];
+                        
+                        // On remplit le deuxième menu avec les nouvelles options
+                        options.forEach(optionText => {
+                            const option = document.createElement('option');
+                            option.value = optionText.toLowerCase().replace(/\s+/g, '-');
+                            option.textContent = optionText;
+                            optionSelect.appendChild(option);
+                        });
+                    } else {
+                        optionSelect.disabled = true; // On désactive si pas de choix
+                    }
+                });
+
+                // Écouteur pour afficher le choix final
+                optionSelect.addEventListener('change', () => {
+                    if (optionSelect.value) {
+                        const selectedOptionText = optionSelect.options[optionSelect.selectedIndex].text;
+                        selectionResult.textContent = `Vous avez choisi : ${selectedOptionText}`;
+                    } else {
+                        selectionResult.textContent = '';
+                    }
+                });
+
+            })
+            .catch(error => {
+                console.error('Un problème est survenu :', error);
+                // On peut afficher un message à l'utilisateur si le JSON ne se charge pas
+                functionSelect.innerHTML = '<option value="">Erreur de chargement des options</option>';
             });
-        }).catch(error => console.error('Erreur de chargement du JSON:', error));
     }
 });
