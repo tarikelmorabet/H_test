@@ -237,3 +237,15 @@ footer a:hover {
         font-size: 16px;
     }
 }
+/* --- Style pour les nouveaux menus du tableau de bord --- */
+
+#offer-form select {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-size: 16px;
+    background-color: #f9f9f9;
+}

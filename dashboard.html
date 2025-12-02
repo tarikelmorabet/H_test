@@ -11,15 +11,47 @@
     <div class="container-help">
         <h1>Tableau de Bord</h1>
         
-        <!-- Message de bienvenue qui sera rempli par JavaScript -->
         <p id="welcome-message">Chargement...</p>
 
-        <!-- Bouton de déconnexion -->
-        <button id="logout-button">Se déconnecter</button>
-        
-        <!-- Le formulaire sera ajouté ici à la prochaine étape -->
-    </div>
+        <form id="offer-form">
+            <h2>Mon offre d'aide</h2>
+            
+            <!-- MENU DÉROULANT POUR LA FONCTION -->
+            <label for="offer-function">Je propose mon aide en tant que :</label>
+            <select id="offer-function" required>
+                <option value="">--Choisir une fonction--</option>
+            </select>
 
-    <script src="script.js"></script>
-</body>
-</html>
+            <!-- MENU DÉROULANT POUR L'OPTION SPÉCIFIQUE -->
+            <label for="offer-option">Option spécifique :</label>
+            <select id="offer-option" disabled>
+                <option value="">--D'abord, choisissez une fonction--</option>
+            </select>
+
+            <!-- CHAMP POUR LA DESCRIPTION -->
+            <label for="offer-description">Description de mes services :</label>
+            <textarea id="offer-description" rows="5" placeholder="Décrivez ce que vous pouvez faire, vos compétences, etc."></textarea>
+
+                
+
+            <!-- CHAMP POUR LES HORAIRES -->
+            <label for="offer-schedule">Mes horaires de disponibilité :</label>
+            <select id="offer-schedule">
+                <option value="8h-18h">8h - 18h</option>
+                <option value="9h-17h">9h - 17h</option>
+                <option value="Soir et week-end">Soir et week-end</option>
+                <option value="24h/24 et 7j/7">24h/24 et 7j/7</option>
+                <option value="Sur rendez-vous">Sur rendez-vous</option>
+            </select>
+
+            <!-- NOUVEAU CHAMP POUR LE PRIX -->
+            <label for="offer-price">Prix moyen par intervention standard (en Dh) :</label>
+            <input type="number" id="offer-price" placeholder="Ex: 250" min="0" step="10">
+
+            <!-- MENU DÉROULANT POUR LA VILLE -->
+            <label for="offer-city">Ma ville :</label>
+            <select id="offer-city">
+                <option value="">--Choisir une ville--</option>
+            </select>
+
+<!-- ... (le code après reste inchangé) ... -->

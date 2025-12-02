@@ -162,34 +162,127 @@ if (loginForm) {
 // --- LOGIQUE POUR LA PAGE TABLEAU DE BORD (dashboard.html) ---
 const welcomeMessage = document.getElementById('welcome-message');
 const logoutButton = document.getElementById('logout-button');
+const offerForm = document.getElementById('offer-form');
+const offerMessage = document.getElementById('offer-message');
 
-// On vérifie si les éléments existent bien sur la page
-if (welcomeMessage && logoutButton) {
-    
-    // Vérifier si un utilisateur est connecté
+if (welcomeMessage && logoutButton && offerForm) {
     const loggedInUserEmail = localStorage.getItem('loggedInUser');
     
     if (loggedInUserEmail) {
-        // Récupérer les données de l'utilisateur
         const userData = JSON.parse(localStorage.getItem(loggedInUserEmail));
-        
-        if (userData && userData.username) {
-            // Afficher le message de bienvenue personnalisé
-            welcomeMessage.textContent = `Bonjour, ${userData.username} !`;
-        } else {
-            welcomeMessage.textContent = "Bonjour !";
-        }
+        welcomeMessage.textContent = `Bonjour, ${userData.username} !`;
+
+        // --- RÉFÉRENCES AUX ÉLÉMENTS DU FORMULAIRE ---
+        const functionSelect = document.getElementById('offer-function');
+        const optionSelect = document.getElementById('offer-option');
+        const descriptionInput = document.getElementById('offer-description');
+		const priceInput = document.getElementById('offer-price');
+        const scheduleSelect = document.getElementById('offer-schedule');
+        const citySelect = document.getElementById('offer-city');
+        const districtSelect = document.getElementById('offer-district');
+
+        // --- CHARGEMENT DES DONNÉES (fonctions et villes) ---
+        Promise.all([
+            fetch('data.json').then(res => res.json()),
+            fetch('cities.json').then(res => res.json())
+        ]).then(([functionsData, citiesData]) => {
+            const allOptions = functionsData.options;
+            const allCities = citiesData.cities;
+
+            // Remplir le menu des fonctions
+            Object.keys(allOptions).forEach(func => {
+                const option = document.createElement('option');
+                option.value = func;
+                option.textContent = func.charAt(0).toUpperCase() + func.slice(1);
+                functionSelect.appendChild(option);
+            });
+
+            // Remplir le menu des villes
+            Object.keys(allCities).forEach(city => {
+                const option = document.createElement('option');
+                option.value = city;
+                option.textContent = city;
+                citySelect.appendChild(option);
+            });
+            
+            // LOGIQUE DES MENUS LIÉS (Fonction -> Option)
+            functionSelect.addEventListener('change', () => {
+                const selectedFunction = functionSelect.value;
+                optionSelect.innerHTML = '<option value="">--Choisir une option--</option>';
+                if (selectedFunction && allOptions[selectedFunction]) {
+                    optionSelect.disabled = false;
+                    allOptions[selectedFunction].forEach(optText => {
+                        const option = document.createElement('option');
+                        option.value = optText;
+                        option.textContent = optText;
+                        optionSelect.appendChild(option);
+                    });
+                } else {
+                    optionSelect.disabled = true;
+                }
+            });
+
+            // LOGIQUE DES MENUS LIÉS (Ville -> Quartier)
+            citySelect.addEventListener('change', () => {
+                const selectedCity = citySelect.value;
+                districtSelect.innerHTML = '<option value="">--Choisir un quartier--</option>';
+                if (selectedCity && allCities[selectedCity]) {
+                    districtSelect.disabled = false;
+                    allCities[selectedCity].forEach(districtText => {
+                        const option = document.createElement('option');
+                        option.value = districtText;
+                        option.textContent = districtText;
+                        districtSelect.appendChild(option);
+                    });
+                } else {
+                    districtSelect.disabled = true;
+                }
+            });
+
+            // Charger les données sauvegardées de l'offre
+            const offerData = JSON.parse(localStorage.getItem(`offer_${loggedInUserEmail}`));
+            if (offerData) {
+                functionSelect.value = offerData.function || '';
+                functionSelect.dispatchEvent(new Event('change')); // Déclencher l'événement pour remplir le menu d'options
+                optionSelect.value = offerData.option || '';
+                descriptionInput.value = offerData.description || '';
+                scheduleSelect.value = offerData.schedule || '';
+				priceInput.value = offerData.price || '';
+                citySelect.value = offerData.city || '';
+                citySelect.dispatchEvent(new Event('change')); // Déclencher l'événement pour remplir le menu des quartiers
+                districtSelect.value = offerData.district || '';
+            }
+
+        }).catch(error => console.error('Erreur de chargement des données:', error));
+
+        // --- SOUMISSION DU FORMULAIRE ---
+        offerForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const newOfferData = {
+                function: functionSelect.value,
+                option: optionSelect.value,
+                description: descriptionInput.value,
+                schedule: scheduleSelect.value,
+				price: priceInput.value,
+                city: citySelect.value,
+                district: districtSelect.value,
+                userEmail: loggedInUserEmail
+            };
+
+            localStorage.setItem(`offer_${loggedInUserEmail}`, JSON.stringify(newOfferData));
+            
+            offerMessage.textContent = "Votre offre a été sauvegardée avec succès !";
+            offerMessage.style.color = "green";
+            setTimeout(() => { offerMessage.textContent = ''; }, 3000);
+        });
+
     } else {
-        // Si personne n'est connecté, rediriger vers la page de connexion
         window.location.href = 'login.html';
     }
 
-    // Gérer le clic sur le bouton de déconnexion
     logoutButton.addEventListener('click', () => {
-        // Supprimer la session de l'utilisateur
         localStorage.removeItem('loggedInUser');
-        
-        // Rediriger vers la page d'accueil
         window.location.href = 'index.html';
     });
 }

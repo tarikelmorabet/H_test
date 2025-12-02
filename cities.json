@@ -1,0 +1,9 @@
+{
+  "cities": {
+    "Casablanca": ["Ain Sebaa", "Anfa", "Maarif", "Hay Mohammadi", "Sidi Maarouf", "Derb Sultan", "Toulal", "Dans toute la ville"],
+    "Rabat": ["Agdal", "Hassan", "Hay Riad", "Ocean", "Ryad Salam", "Youssoufia", "Dans toute la ville"],
+    "Marrakech": ["Guéliz", "Ménara", "Semlalia", "Sidi Youssef", "El Massira", "Moulay Abdellah", "Dans toute la ville"],
+    "Tanger": ["Marsan", "Bni Makada", "Tanger-Med", "Médina", "Ibn Battouta", "Dans toute la ville"],
+    "Fès": ["Fès El Jadid", "Mérinides", "Agdal", "Boujloud", "Saïss", "Ziat", "Dans toute la ville"]
+  }
+}
