@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
 
-    // --- LOGIQUE POUR LA PAGE D'ACCUEIL (H_test) ---
+    // --- LOGIQUE POUR LA PAGE D'ACCUEIL (index.html) ---
     const btnHelpNeeded = document.getElementById('btn-help-needed');
     const btnCanHelp = document.getElementById('btn-can-help');
 
@@ -15,46 +15,44 @@ document.addEventListener('DOMContentLoaded', () => {
             addClickEffect(btnHelpNeeded);
         });
 
+        // MODIFICATION : Le bouton "I can Help" mène maintenant à la nouvelle page
         btnCanHelp.addEventListener('click', () => {
-            window.open('https://www.wikipedia.org/', '_blank');
+            window.location.href = 'can_help.html';
             addClickEffect(btnCanHelp);
         });
     }
 
+    // --- LOGIQUE POUR LES BOUTONS DE RETOUR ---
+    const backButton = document.getElementById('back-button');
 
-    // --- LOGIQUE POUR LA PAGE "I need help" ---
+    // On vérifie si le bouton de retour existe sur la page actuelle
+    if (backButton) {
+        backButton.addEventListener('click', () => {
+            // Redirige vers la page d'accueil
+            window.location.href = 'index.html';
+        });
+    }
+
+
+    // --- LOGIQUE POUR LA PAGE "I need help" (need_help.html) ---
     const functionSelect = document.getElementById('function-select');
     const optionSelect = document.getElementById('option-select');
     const selectionResult = document.getElementById('selection-result');
 
-    // On vérifie si les éléments de la page "need_help" existent avant de continuer
     if (functionSelect && optionSelect) {
-
-        // On charge les données depuis le fichier JSON
         fetch('data.json')
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error("Erreur lors du chargement du fichier data.json");
-                }
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
                 const allOptions = data.options;
 
-                // Écouteur d'événement pour le premier menu
                 functionSelect.addEventListener('change', () => {
                     const selectedFunction = functionSelect.value;
-                    
-                    // On vide le menu des options précédentes
                     optionSelect.innerHTML = '<option value="">--Choose an option--</option>';
                     selectionResult.textContent = '';
 
                     if (selectedFunction && allOptions[selectedFunction]) {
-                        optionSelect.disabled = false; // On active le deuxième menu
-                        
+                        optionSelect.disabled = false;
                         const options = allOptions[selectedFunction];
-                        
-                        // On remplit le deuxième menu avec les nouvelles options
                         options.forEach(optionText => {
                             const option = document.createElement('option');
                             option.value = optionText.toLowerCase().replace(/\s+/g, '-');
@@ -62,11 +60,10 @@ document.addEventListener('DOMContentLoaded', () => {
                             optionSelect.appendChild(option);
                         });
                     } else {
-                        optionSelect.disabled = true; // On désactive si pas de choix
+                        optionSelect.disabled = true;
                     }
                 });
 
-                // Écouteur pour afficher le choix final
                 optionSelect.addEventListener('change', () => {
                     if (optionSelect.value) {
                         const selectedOptionText = optionSelect.options[optionSelect.selectedIndex].text;
@@ -75,12 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         selectionResult.textContent = '';
                     }
                 });
-
             })
-            .catch(error => {
-                console.error('Un problème est survenu :', error);
-                // On peut afficher un message à l'utilisateur si le JSON ne se charge pas
-                functionSelect.innerHTML = '<option value="">Erreur de chargement des options</option>';
-            });
+            .catch(error => console.error('Erreur de chargement du JSON:', error));
     }
 });

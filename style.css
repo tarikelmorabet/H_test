@@ -82,3 +82,36 @@ button:hover {
     color: #0056b3; /* Un bleu un peu plus foncé */
     min-height: 20px; /* Pour éviter que la page ne "saute" */
 }
+/* ... (gardez votre ancien code CSS ici) ... */
+
+/* NOUVEAU STYLE UNIVERSEL POUR LES BOUTONS */
+button {
+    font-size: 18px; /* Taille de police unifiée */
+    padding: 15px 30px; /* Padding unifié pour une taille cohérente */
+    margin: 10px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    background-color: white;
+    color: #007bff;
+    font-weight: bold;
+    transition: background-color 0.3s, color 0.3s;
+    /* Assure que tous les boutons ont la même hauteur de base */
+    min-height: 50px; 
+    box-sizing: border-box; /* Assure que le padding est inclus dans la taille totale */
+}
+
+button:hover {
+    background-color: #f0f0f0;
+}
+
+/* Style pour le bouton de retour sur les pages secondaires */
+#back-button {
+    background-color: #6c757d; /* Une couleur neutre pour le retour */
+    color: white;
+    margin-top: 30px; /* Plus d'espace au-dessus */
+}
+
+#back-button:hover {
+    background-color: #5a6268;
+}
