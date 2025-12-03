@@ -1,147 +1,22 @@
-body {
-    background-color: #007bff; /* Une belle couleur bleue */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
-    font-family: sans-serif;
-}
-
-.container {
-    text-align: center;
-}
-
-button {
-    font-size: 24px;
-    padding: 20px 40px;
-    margin: 10px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    background-color: white;
-    color: #007bff;
-    font-weight: bold;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-button:hover {
-    background-color: #f0f0f0;
-}
-/* ... (gardez votre ancien code CSS ici) ... */
-
-/* Nouvelle classe pour l'effet de clic */
-.button-clicked {
-    transform: scale(0.95);
-    opacity: 0.7;
-}
-/* ... (gardez votre ancien code CSS ici) ... */
-
-/* Style pour la page "I need help" */
-.container-help {
-    background-color: white;
-    padding: 40px;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
-    text-align: center;
-    width: 90%;
-    max-width: 400px;
-}
-
-.container-help h1 {
-    color: #007bff;
-    margin-bottom: 25px;
-}
-
-.container-help label {
-    font-size: 18px;
-    color: #333;
-    margin-bottom: 10px;
-    display: block;
-}
-
-.container-help select {
-    width: 100%;
-    padding: 12px;
-    border-radius: 8px;
-    border: 1px solid #ccc;
-    font-size: 16px;
-    background-color: #f9f9f9;
-}
-/* ... (gardez votre ancien code CSS ici) ... */
-
-/* Style pour le deuxième menu et le résultat */
-#option-select {
-    margin-top: 20px; /* Espace au-dessus du menu */
-}
-
-#selection-result {
-    margin-top: 20px;
-    font-size: 16px;
-    font-weight: bold;
-    color: #0056b3; /* Un bleu un peu plus foncé */
-    min-height: 20px; /* Pour éviter que la page ne "saute" */
-}
-/* ... (gardez votre ancien code CSS ici) ... */
-
-/* NOUVEAU STYLE UNIVERSEL POUR LES BOUTONS */
-button {
-    font-size: 18px; /* Taille de police unifiée */
-    padding: 15px 30px; /* Padding unifié pour une taille cohérente */
-    margin: 10px;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    background-color: white;
-    color: #007bff;
-    font-weight: bold;
-    transition: background-color 0.3s, color 0.3s;
-    /* Assure que tous les boutons ont la même hauteur de base */
-    min-height: 50px; 
-    box-sizing: border-box; /* Assure que le padding est inclus dans la taille totale */
-}
-
-button:hover {
-    background-color: #f0f0f0;
-}
-
-/* Style pour le bouton de retour sur les pages secondaires */
-#back-button {
-    background-color: #6c757d; /* Une couleur neutre pour le retour */
-    color: white;
-    margin-top: 30px; /* Plus d'espace au-dessus */
-}
-
-#back-button:hover {
-    background-color: #5a6268;
-}
-/* Style pour les formulaires */
-input[type="text"],
-input[type="email"],
-input[type="password"] {
-    width: 100%;
-    padding: 12px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    box-sizing: border-box; /* Important pour que le padding n'affecte pas la largeur */
-}
-
-form {
-    width: 100%;
-}
-
-#register-message,
-#login-message {
-    margin-top: 15px;
-    color: #d9534f; /* Rouge pour les erreurs */
-    font-weight: bold;
-}
-/* --- NOUVEAUX STYLES POUR LA PAGE D'ACCUEIL AMÉLIORÉE --- */
-/* --- NOUVEAUX STYLES POUR UNE PAGE D'ACCUEIL STANDARD --- */
+/* --- STYLE GLOBAL POUR L'IMAGE DE FOND --- */
 
 body {
-    background-color: #f4f4f9; /* Un gris clair pour un look plus neutre */
+    /* On applique l'image de fond */
+    background-image: url('https://z-cdn-media.chatglm.cn/files/b6eea60d-2656-4cad-b02b-7bbcb08b80fe.jpg?auth_key=1864762782-9cd2df9abe904eb79970953ae3911081-0-4a0ccc84dd2d7aa33accc5d49c6d6fd8');
+    
+    /* On s'assure que l'image couvre tout l'écran */
+    background-size: cover;
+    
+    /* On centre l'image */
+    background-position: center center;
+    
+    /* On empêche l'image de se répéter */
+    background-repeat: no-repeat;
+    
+    /* On fixe l'image pour qu'elle ne bouge pas au scroll */
+    background-attachment: fixed;
+
+    /* On garde les autres styles du body */
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     color: #333;
     line-height: 1.6;
@@ -152,8 +27,72 @@ body {
     min-height: 100vh;
 }
 
+/* --- STYLE POUR LES BOUTONS ET LES FORMULAIRES (GÉNÉRAL) --- */
+
+button {
+    font-size: 18px;
+    padding: 15px 30px;
+    margin: 10px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    background-color: #5a67d8; /* Couleur principale harmonisée */
+    color: white;
+    border: 2px solid #5a67d8;
+    transition: background-color 0.3s, color 0.3s, transform 0.2s;
+    min-height: 50px;
+    box-sizing: border-box;
+}
+
+button:hover {
+    background-color: transparent;
+    color: #5a67d8;
+}
+
+.button-clicked {
+    transform: scale(0.95);
+    opacity: 0.7;
+    background-color: #4c51bf; /* Couleur pour l'effet de clic */
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="number"],
+textarea,
+select {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-sizing: border-box;
+    font-size: 16px;
+    background-color: #f9f9f9;
+}
+
+form {
+    width: 100%;
+}
+
+#register-message,
+#login-message {
+    margin-top: 15px;
+    color: #d9534f;
+    font-weight: bold;
+}
+
+#offer-message {
+    margin-top: 15px;
+    color: #28a745;
+    font-weight: bold;
+    text-align: center;
+}
+
+/* --- STYLE POUR LA PAGE D'ACCUEIL STANDARD --- */
+
 header {
-    background-color: #007bff;
+    background-color: #4c51bf; /* Violet foncé pour l'en-tête */
     color: white;
     padding: 20px 0;
     text-align: center;
@@ -166,13 +105,13 @@ header h1 {
 }
 
 main.container {
-    flex-grow: 1; /* Pousse le footer vers le bas */
+    flex-grow: 1;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     padding: 40px 20px;
-    gap: 20px; /* Espace entre les boutons */
+    gap: 20px;
 }
 
 .main-button {
@@ -185,9 +124,9 @@ main.container {
     font-weight: bold;
     padding: 15px 30px;
     border-radius: 8px;
-    background-color: #007bff;
+    background-color: #5a67d8;
     color: white;
-    border: 2px solid #007bff;
+    border: 2px solid #5a67d8;
     transition: background-color 0.3s, color 0.3s, transform 0.2s;
     cursor: pointer;
     box-sizing: border-box;
@@ -195,7 +134,7 @@ main.container {
 
 .main-button:hover {
     background-color: transparent;
-    color: #007bff;
+    color: #5a67d8;
 }
 
 #about {
@@ -208,7 +147,7 @@ main.container {
 
 #about h2 {
     margin-bottom: 15px;
-    color: #007bff;
+    color: #5a67d8;
 }
 
 footer {
@@ -228,7 +167,95 @@ footer a:hover {
     text-decoration: underline;
 }
 
-/* Responsive Design */
+/* --- STYLE POUR LES PAGES SECONDAIRES (connexion, inscription, etc.) --- */
+
+.container-help {
+    background-color: rgba(255, 255, 255, 0.9); /* Blanc avec 90% d'opacité */
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    width: 90%;
+    max-width: 400px;
+    margin: 40px auto; /* Pour centrer la boîte */
+    backdrop-filter: blur(5px); /* Effet de flou moderne */
+    -webkit-backdrop-filter: blur(5px); /* Pour Safari */
+}
+
+.container-help h1 {
+    color: #4c51bf;
+    margin-bottom: 25px;
+}
+
+.container-help label {
+    display: block;
+    text-align: left;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.container-help textarea {
+    min-height: 100px;
+    resize: vertical;
+}
+
+#back-button {
+    background-color: #718096; /* Gris doux */
+    color: white;
+    margin-top: 30px;
+}
+
+#back-button:hover {
+    background-color: #4a5568;
+}
+
+/* --- STYLE POUR LA PAGE DES OFFRES --- */
+
+#offers-list {
+    width: 100%;
+    margin-top: 20px;
+}
+
+.offer-card {
+    background-color: rgba(255, 255, 255, 0.9);
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    text-align: left;
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
+}
+
+.offer-card h3 {
+    margin-top: 0;
+    color: #5a67d8;
+    border-bottom: 2px solid #5a67d8;
+    padding-bottom: 5px;
+}
+
+.offer-card p {
+    margin-bottom: 10px;
+    line-height: 1.5;
+}
+
+.offer-card .price {
+    font-weight: bold;
+    color: #28a745; /* Vert pour le prix */
+}
+
+.offer-card .contact-info {
+    font-size: 0.9em;
+    color: #555;
+    background-color: #e9ecef;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 15px;
+    text-align: center;
+}
+
+/* --- Responsive Design --- */
 @media (max-width: 600px) {
     header h1 {
         font-size: 2rem;
@@ -236,16 +263,8 @@ footer a:hover {
     .main-button {
         font-size: 16px;
     }
-}
-/* --- Style pour les nouveaux menus du tableau de bord --- */
-
-#offer-form select {
-    width: 100%;
-    padding: 12px;
-    margin-bottom: 15px;
-    border: 1px solid #ccc;
-    border-radius: 8px;
-    box-sizing: border-box;
-    font-size: 16px;
-    background-color: #f9f9f9;
+    .container-help {
+        padding: 20px;
+        margin: 20px auto;
+    }
 }
