@@ -12,19 +12,33 @@
         <h1>Trouvez de l'aide</h1>
         <p>Dites-nous ce dont vous avez besoin et où.</p>
         
-        <form id="search-form">
-            <label for="search-function">Quelle sorte d'aide ?</label>
-            <select id="search-function">
-                <option value="">Toutes les catégories</option>
-            </select>
+      <form id="search-form">
+    <label for="search-function">Quelle sorte d'aide ?</label>
+    <select id="search-function">
+        <option value="">Toutes les catégories</option>
+    </select>
 
-            <label for="search-city">Dans quelle ville ?</label>
-            <select id="search-city">
-                <option value="">Toutes les villes</option>
-            </select>
+    <label for="search-city">Dans quelle ville ?</label>
+    <select id="search-city">
+        <option value="">Toutes les villes</option>
+    </select>
 
-            <button type="submit">Rechercher</button>
-        </form>
+    <!-- NOUVEAU MENU DÉROULANT POUR LE QUARTIER -->
+    <label for="search-district">Dans quel quartier ?</label>
+    <select id="search-district" disabled>
+        <option value="">Tous les quartiers</option>
+    </select>
+
+    <button type="submit">Rechercher</button>
+</form>
+
+<!-- NOUVEAU FILTRE POUR LES OPTIONS SPÉCIFIQUES -->
+<div id="filter-container">
+    <label for="option-filter">Filtrer par option spécifique :</label>
+    <select id="option-filter">
+        <option value="">Toutes les options</option>
+    </select>
+</div>
 
         <!-- Les résultats de la recherche s'afficheront ici -->
         <div id="search-results">
@@ -37,3 +51,4 @@
     <script src="script.js"></script>
 </body>
 </html>
+
